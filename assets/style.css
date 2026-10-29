@@ -18,3 +18,25 @@ h3 {font-size:1.03rem!important;}
 [data-testid="stBaseButton-primary"] {background:linear-gradient(110deg,#2563eb,#6d28d9);border:0;color:white;}
 a:focus-visible,button:focus-visible,input:focus-visible {outline:3px solid #f59e0b!important;outline-offset:3px;}
 @media(max-width:700px){.block-container{padding-left:.8rem!important;padding-right:.8rem!important}.gh-hero h1{font-size:1.5rem!important}}
+
+/* A single aligned brand bar avoids the detached logo column on narrow pages. */
+.gh-hero {display:flex;align-items:center;gap:14px;padding:14px 18px!important;margin:0 0 4px!important;min-height:92px;}
+.gh-brand-mark {width:54px;height:54px;flex:0 0 54px;display:block;border-radius:13px;box-shadow:0 4px 16px #080e3040;}
+.gh-brand-copy {min-width:0;}
+.gh-hero h1 {padding:0!important;margin:0 0 5px!important;line-height:1.15!important;}
+.gh-hero p {margin:0!important;padding:0!important;line-height:1.4;}
+[data-testid="stMainBlockContainer"] {padding-top:.7rem!important;padding-bottom:1rem!important;}
+[data-testid="stVerticalBlock"] {gap:.5rem;}
+[data-testid="stSidebarUserContent"] {padding-top:.6rem!important;}
+[data-testid="stSidebarHeader"] {padding-top:.6rem!important;padding-bottom:.3rem!important;}
+[data-testid="stSidebar"] [data-testid="stLogo"] {height:42px!important;width:auto!important;object-fit:contain;}
+[data-testid="stMarkdownContainer"] p {margin-bottom:.45rem;}
+[data-testid="stHeadingWithActionElements"] h2,[data-testid="stHeadingWithActionElements"] h3 {padding-top:.35rem!important;padding-bottom:.4rem!important;}
+[data-testid="stPageLink"] a {border-radius:9px;padding:.38rem .65rem;min-height:2.2rem;transition:background .15s ease;}
+[data-testid="stTopNav"] {padding-top:.25rem;padding-bottom:.25rem;}
+[data-testid="stVerticalBlockBorderWrapper"]>div {border-radius:12px;}
+[data-testid="stTabs"] [role="tablist"] {gap:.4rem;}
+[data-testid="stTabs"] [role="tab"] {padding:.35rem .7rem;border-radius:8px;background:var(--gh-card);}
+[data-testid="stTabs"] [aria-selected="true"] {background:#3349a1!important;color:#fff!important;}
+[data-testid="stTabs"] [aria-selected="true"] p {color:#fff!important;}
+@media(max-width:700px){.gh-hero{gap:10px;padding:12px!important}.gh-brand-mark{width:42px;height:42px;flex-basis:42px}.gh-hero h1{font-size:1.3rem!important}.gh-hero p{font-size:.8rem}}

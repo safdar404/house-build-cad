@@ -40,7 +40,7 @@ def test_dark_theme_and_native_logo_render():
     app=AppTest.from_file(str(ROOT/'app.py'),default_timeout=60).run()
     app.selectbox(key='gh_theme').set_value('dark').run()
     assert not app.exception
-    assert app.get('image')
+    assert any('gh-brand-mark' in m.value and 'data:image/svg+xml;base64,' in m.value for m in app.markdown)
     styles='\n'.join(m.value for m in app.markdown if '<style>' in m.value)
     assert 'stHeader' in styles and 'stTopNav' in styles and '#1b253a!important' in styles
 
@@ -72,3 +72,16 @@ def test_dark_mode_preserves_prepared_agent_tools(concept):
     assert not app.exception
     assert app.session_state['gh_runtime'] is runtime
     assert Stage.REQUIREMENTS in runtime.orchestrator.tasks
+
+
+def test_old_session_workspace_offers_explicit_recovery():
+    app=AppTest.from_file(str(ROOT/'app.py'),default_timeout=60).run()
+    app.session_state['gharbuilder_workspace']=object()
+    app.run()
+    assert not app.exception
+    assert any('older app version' in warning.value for warning in app.warning)
+    assert any(button.label=='Start a new workspace' for button in app.button)
+    assert app.session_state['gharbuilder_workspace'] is not None
+    next(button for button in app.button if button.label=='Start a new workspace').click().run()
+    assert not app.exception
+    assert app.session_state['gharbuilder_workspace'].project

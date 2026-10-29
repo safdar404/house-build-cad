@@ -43,7 +43,7 @@ def main():
         st.caption('Automatic preparation covers bylaw review, AI planning, CAD, 3D and IFC when their project sources exist. Other tools use the explicit rates, crew, schedule and monitoring inputs from their pages. Preparation never starts an API call.')
         for stage,task in tuple(tasks.items()):
             row=next(item for item in context['stages'] if item['stage']==stage.value)
-            with st.expander(stage.value.title()+' inputs · '+row['status'],expanded=True):
+            with st.expander(stage.value.title()+' inputs · '+row['status'],expanded=row['ready'] or row['status']=='review'):
                 st.page_link(row['page'],label='Edit '+stage.value.title()+' inputs',icon='↗️')
                 payload=task.request.model_dump(mode='json')
                 if 'payload_json' in payload:
@@ -65,8 +65,9 @@ def main():
                           on_click=run_tool,args=(stage,))
                 st.caption(row['next_action'])
         st.write('**All specialist tools**')
-        for stage in Stage:
-            st.page_link('pages/'+STAGE_PAGES[stage]+'.py',label=stage.value.title()+' · '+workspace.record(stage).status)
+        tool_columns=st.columns(3)
+        for index,stage in enumerate(Stage):
+            tool_columns[index%3].page_link('pages/'+STAGE_PAGES[stage]+'.py',label=stage.value.title()+' · '+workspace.record(stage).status)
     with activity:
         st.dataframe(context['stages'],hide_index=True,column_order=['stage','status','prepared','authorized','ready','next_action'])
         if workspace.revision_notes:st.json({s.value:n for s,n in workspace.revision_notes.items()})

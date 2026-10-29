@@ -23,7 +23,7 @@ def main() -> None:
             from dotenv import load_dotenv
             load_dotenv(ROOT/'.env',override=False)
         from ui.components import apply_theme,render_home,sidebar,tr
-        from ui.state import get_workspace
+        from ui.state import get_workspace,WorkflowError
     except ModuleNotFoundError as error:
         st.error('An application dependency is missing: '+str(error.name))
         st.info('Open Manage app and inspect the dependency installation log. '
@@ -36,7 +36,17 @@ def main() -> None:
         runtime=st.session_state.pop('gh_runtime',None)
         if runtime is not None:runtime.orchestrator.close()
         st.session_state.pop('gh_runtime_signature',None)
-    workspace=get_workspace(st.session_state)
+    try:workspace=get_workspace(st.session_state)
+    except WorkflowError:
+        apply_theme(st.session_state.get('gh_theme','light'))
+        st.warning('This browser session belongs to an older app version. Open a fresh browser tab or start a new workspace below.')
+        st.caption('Starting a new workspace clears this tab’s project and prepared tools. Your API key field is retained.')
+        if st.button('Start a new workspace',type='primary'):
+            for name in list(st.session_state):
+                if name.startswith(('gh_','gharbuilder_')) and name!='gh_api_key':
+                    del st.session_state[name]
+            st.rerun()
+        st.stop()
     sidebar(workspace)
     apply_theme(st.session_state.get('gh_theme','light'))
     home=st.Page(render_home,title=tr('home'),icon='🏠',default=True)

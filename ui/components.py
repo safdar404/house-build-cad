@@ -7,6 +7,7 @@ or a specialist explicitly runs.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import html
 import json
@@ -47,7 +48,8 @@ def tr(key: str) -> str:
 
 def apply_theme(theme: str='light') -> None:
     dark=theme=='dark';bg='#0e1424' if dark else '#f4f6fc';fg='#edf2ff' if dark else '#21334d'
-    card='#1b253a' if dark else '#ffffff';border='#35435e' if dark else '#dce3f1'
+    card='#1b253a' if dark else '#f8faff';border='#35435e' if dark else '#cbd8f0'
+    button_bg='#263858' if dark else '#e3ecff';button_hover='#344c73' if dark else '#cddfff'
     gradient=','.join(RAINBOW)
     extra=Path(__file__).resolve().parents[1]/'assets'/'style.css'
     if extra.is_file():st.markdown('<style>'+extra.read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
@@ -62,7 +64,11 @@ def apply_theme(theme: str='light') -> None:
     header button svg,nav button svg{{fill:currentColor;}}
     [data-testid="stBaseButton-primary"],[data-testid="stBaseButton-primary"] p,[data-testid="stBaseButton-primary"] span{{color:#ffffff!important;}}
     [data-testid="stBaseButton-secondary"],[data-testid="stBaseButton-tertiary"],
-    [data-testid="stPageLink-NavLink"],button[kind="secondary"],button[kind="tertiary"]{{background:{card}!important;color:{fg}!important;border-color:{border}!important;}}
+    [data-testid="stPageLink-NavLink"],button[kind="secondary"],button[kind="tertiary"]{{background:{button_bg}!important;color:{fg}!important;border-color:{border}!important;}}
+    [data-testid="stPageLink"] a,[data-testid="stDownloadButton"] button,button[kind="secondaryFormSubmit"]{{background:{button_bg}!important;color:{fg}!important;border:1px solid {border}!important;}}
+    [data-testid="stPageLink"] a:hover,[data-testid="stBaseButton-secondary"]:hover,[data-testid="stDownloadButton"] button:hover{{background:{button_hover}!important;transform:translateY(-1px);}}
+    [data-testid="stTopNavLink"],[data-testid="stTopNavSection"]{{border:1px solid {border}!important;border-radius:9px!important;background:{button_bg}!important;}}
+    [data-testid="stTopNavLink"][aria-current="page"]{{box-shadow:inset 0 -3px #7c3aed;}}
     [data-baseweb="select"]>div,[data-baseweb="input"],[data-baseweb="base-input"],
     [data-testid="stTextArea"] textarea,[data-testid="stNumberInput"] input{{background:{card}!important;color:{fg}!important;border-color:{border}!important;}}
     [data-baseweb="popover"],[data-baseweb="popover"] ul,[data-baseweb="menu"],
@@ -96,13 +102,12 @@ def apply_theme(theme: str='light') -> None:
 
 def hero(title: str='🏗️ GharBuilder AI',subtitle: str='Agentic House Design & Estimation Studio') -> None:
     logo=Path(__file__).resolve().parents[1]/'assets'/'agent-mark.svg'
+    mark=''
     if logo.is_file():
-        mark,heading=st.columns([1,14],vertical_alignment='center')
-        mark.image(str(logo),width=56)
-        with heading:
-            st.markdown('<div class="gh-hero"><h1>'+html.escape(title.replace('🏗️ ',''))+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
-    else:
-        st.markdown('<div class="gh-hero"><h1>'+html.escape(title)+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
+        source=base64.b64encode(logo.read_bytes()).decode('ascii')
+        mark='<img class="gh-brand-mark" src="data:image/svg+xml;base64,'+source+'" alt="GharBuilder AI agent logo" />'
+    st.markdown('<div class="gh-hero">'+mark+'<div class="gh-brand-copy"><h1>'+
+        html.escape(title.replace('🏗️ ',''))+'</h1><p>'+html.escape(subtitle)+'</p></div></div>',unsafe_allow_html=True)
 
 
 
