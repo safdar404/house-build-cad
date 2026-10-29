@@ -1,5 +1,5 @@
 /* Compact agent workspace. Native widgets remain keyboard accessible. */
-.block-container {padding-top:1rem!important;padding-bottom:1.5rem!important;max-width:1480px;}
+.block-container {padding-top:6rem!important;padding-bottom:1.5rem!important;max-width:1480px;}
 [data-testid="stVerticalBlock"] {gap:.65rem;}
 [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {gap:.45rem;}
 h1 {font-size:1.8rem!important;letter-spacing:-.035em;}
@@ -25,7 +25,7 @@ a:focus-visible,button:focus-visible,input:focus-visible {outline:3px solid #f59
 .gh-brand-copy {min-width:0;}
 .gh-hero h1 {padding:0!important;margin:0 0 5px!important;line-height:1.15!important;}
 .gh-hero p {margin:0!important;padding:0!important;line-height:1.4;}
-[data-testid="stMainBlockContainer"] {padding-top:.7rem!important;padding-bottom:1rem!important;}
+[data-testid="stMainBlockContainer"] {padding-top:6rem!important;padding-bottom:1rem!important;}
 [data-testid="stVerticalBlock"] {gap:.5rem;}
 [data-testid="stSidebarUserContent"] {padding-top:.6rem!important;}
 [data-testid="stSidebarHeader"] {padding-top:.6rem!important;padding-bottom:.3rem!important;}
@@ -40,3 +40,6 @@ a:focus-visible,button:focus-visible,input:focus-visible {outline:3px solid #f59
 [data-testid="stTabs"] [aria-selected="true"] {background:#3349a1!important;color:#fff!important;}
 [data-testid="stTabs"] [aria-selected="true"] p {color:#fff!important;}
 @media(max-width:700px){.gh-hero{gap:10px;padding:12px!important}.gh-brand-mark{width:42px;height:42px;flex-basis:42px}.gh-hero h1{font-size:1.3rem!important}.gh-hero p{font-size:.8rem}}
+
+/* Reserve the fixed Streamlit navigation height; compactness starts below it. */
+@media(max-width:700px){[data-testid="stMainBlockContainer"]{padding-top:6.5rem!important;}}
