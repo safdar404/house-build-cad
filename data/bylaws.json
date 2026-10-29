@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-10-29",
+  "notes": "Configuration creation date only. No official authority rules have been verified. Null values are unresolved and must never be interpreted as zero. The Lahore/LDA record is an editing template, not a legal dataset. Copy a profile for each exact jurisdiction/plot category/corner rule and populate evidence from current official documents. Do not resolve overlapping profiles automatically.",
+  "profiles": [
+    {
+      "id": "lahore_lda_unverified_template",
+      "city": "Lahore",
+      "authority": "LDA",
+      "plot_min_m2": 0,
+      "plot_max_m2": null,
+      "corner": null,
+      "effective_from": "2026-10-29",
+      "valid_until": null,
+      "reviewed_on": null,
+      "profile_verified": false,
+      "rules": [
+        {
+          "key": "front_setback",
+          "value": null,
+          "unit": "m",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Minimum perpendicular distance from the front legal plot boundary to the counted building envelope; confirm projections and exclusions with the authority.",
+          "clause": ""
+        },
+        {
+          "key": "rear_setback",
+          "value": null,
+          "unit": "m",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Minimum distance from the rear legal boundary to the counted envelope; confirm projections and exclusions.",
+          "clause": ""
+        },
+        {
+          "key": "left_setback",
+          "value": null,
+          "unit": "m",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Minimum distance from the left legal boundary when facing into the plot from the front road; confirm corner-road requirements.",
+          "clause": ""
+        },
+        {
+          "key": "right_setback",
+          "value": null,
+          "unit": "m",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Minimum distance from the right legal boundary when facing into the plot from the front road; confirm corner-road requirements.",
+          "clause": ""
+        },
+        {
+          "key": "coverage",
+          "value": null,
+          "unit": "percent",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "100 times authority-counted ground footprint divided by surveyed plot area. Authority must define counted structures, voids and exclusions.",
+          "clause": ""
+        },
+        {
+          "key": "far",
+          "value": null,
+          "unit": "ratio",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Sum of authority-counted floor areas divided by surveyed plot area; explicitly document basement, parking, roof, mumty and void exclusions.",
+          "clause": ""
+        },
+        {
+          "key": "height",
+          "value": null,
+          "unit": "m",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Authority-defined overall building height from the prescribed datum, including parapet and rooftop structures where required.",
+          "clause": ""
+        },
+        {
+          "key": "parking",
+          "value": null,
+          "unit": "count",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Number of provided spaces meeting authority dimensions, access, turning and clearance requirements; not the requested car count.",
+          "clause": ""
+        },
+        {
+          "key": "ventilation_ratio",
+          "value": null,
+          "unit": "ratio",
+          "evidence": {
+            "source": "Not supplied; requires an official authority document",
+            "effective_date": null,
+            "source_url": null,
+            "verified": false,
+            "verified_by": null,
+            "notes": "Do not use as a statutory rule until reviewed."
+          },
+          "measurement_definition": "Minimum effective openable ventilation area divided by floor area across all habitable rooms. Additional room-specific requirements need separate review.",
+          "clause": ""
+        }
+      ]
+    }
+  ]
+}

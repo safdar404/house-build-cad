@@ -1,0 +1,197 @@
+[
+  {
+    "part": "GharBuilder_AI_Part_1",
+    "path": "FOLDER_STRUCTURE.txt",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_1",
+    "path": "README.md",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_1",
+    "path": "requirements.txt",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_2",
+    "path": "config.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_2",
+    "path": "schemas.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_3",
+    "path": "agents/base.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_3",
+    "path": "agents/requirements_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_4",
+    "path": "agents/compliance_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_4",
+    "path": "data/bylaws.json",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_5",
+    "path": "agents/planning_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_5",
+    "path": "tools/geometry.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_6",
+    "path": "agents/cad_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_6",
+    "path": "tools/cad_2d.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_7",
+    "path": "agents/modeling_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_7",
+    "path": "tools/model_3d.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_8",
+    "path": "agents/mep_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_8",
+    "path": "agents/structural_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_9",
+    "path": "agents/bim_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_9",
+    "path": "tools/bim_ifc.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_10",
+    "path": "agents/scheduling_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_10",
+    "path": "tools/schedule_4d.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_11",
+    "path": "agents/cost_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_11",
+    "path": "tools/cost.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_12",
+    "path": "data/rates_pk.json",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_12",
+    "path": "tools/labour.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_13",
+    "path": "agents/labour_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_13",
+    "path": "data/labour_rates.json",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_14",
+    "path": "agents/twin_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_14",
+    "path": "tools/twin.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_15",
+    "path": "agents/report_agent.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_15",
+    "path": "tools/report.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_16",
+    "path": "agents/orchestrator.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_16",
+    "path": "ui/state.py",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_17",
+    "path": "app.py",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_17",
+    "path": "ui/components.py",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_18",
+    "path": "pages/floor_plans.py",
+    "status": "updated_in_complete"
+  },
+  {
+    "part": "GharBuilder_AI_Part_18",
+    "path": "pages/requirements_chat.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_19",
+    "path": "pages/bim_ifc.py",
+    "status": "identical"
+  },
+  {
+    "part": "GharBuilder_AI_Part_19",
+    "path": "pages/model_3d.py",
+    "status": "identical"
+  }
+]

@@ -1,0 +1,374 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-10-29",
+  "base_city": "Lahore",
+  "rates": [
+    {
+      "id": "cement_bag",
+      "description": "Cement, confirm bag mass and grade",
+      "unit": "bag",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "steel_kg",
+      "description": "Reinforcement steel, confirm grade",
+      "unit": "kg",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "bricks_each",
+      "description": "Bricks, confirm size and specification",
+      "unit": "each",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "sand_cft",
+      "description": "Sand, confirm source and grading",
+      "unit": "cft",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "crush_cft",
+      "description": "Crushed aggregate, confirm grading",
+      "unit": "cft",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "tile_m2",
+      "description": "Tiles, confirm specification and material-only scope",
+      "unit": "m2",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "wood_m3",
+      "description": "Wood/timber, confirm species and scope",
+      "unit": "m3",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "paint_litre",
+      "description": "Paint, confirm product and coats",
+      "unit": "litre",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "electrical_point",
+      "description": "Electrical point, define included scope",
+      "unit": "point",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "sanitary_fixture",
+      "description": "Sanitary fixture, define included fittings",
+      "unit": "each",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "labour_day",
+      "description": "Generic labour allowance; prefer trade wage catalog",
+      "unit": "person_day",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "professional_fee",
+      "description": "Architect/engineer fee allowance",
+      "unit": "job",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "approval_fee",
+      "description": "Approval/NOC fee allowance",
+      "unit": "job",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "id": "utility_connection",
+      "description": "Utility connection allowance",
+      "unit": "job",
+      "value_pkr": null,
+      "evidence": {
+        "source": "No quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    }
+  ],
+  "city_factors": [
+    {
+      "city": "Lahore",
+      "multiplier": 1,
+      "evidence": {
+        "source": "Lahore base normalization assumption",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Karachi",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Islamabad",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Rawalpindi",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Faisalabad",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Multan",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Peshawar",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "city": "Quetta",
+      "multiplier": null,
+      "evidence": {
+        "source": "No city comparison supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    }
+  ],
+  "area_rates": [
+    {
+      "quality": "Grey only",
+      "grey_pkr_sqft": 3200,
+      "finishing_pkr_sqft": 0,
+      "labour_fraction": null,
+      "evidence": {
+        "source": "User-supplied 2026 indicative ranges; not verified market quotations",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "quality": "Economy",
+      "grey_pkr_sqft": 3200,
+      "finishing_pkr_sqft": 2300,
+      "labour_fraction": null,
+      "evidence": {
+        "source": "User-supplied 2026 indicative ranges; not verified market quotations",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "quality": "Standard",
+      "grey_pkr_sqft": 3200,
+      "finishing_pkr_sqft": 3800,
+      "labour_fraction": null,
+      "evidence": {
+        "source": "User-supplied 2026 indicative ranges; not verified market quotations",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "quality": "Premium",
+      "grey_pkr_sqft": 3200,
+      "finishing_pkr_sqft": 6800,
+      "labour_fraction": null,
+      "evidence": {
+        "source": "User-supplied 2026 indicative ranges; not verified market quotations",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    },
+    {
+      "quality": "Luxury",
+      "grey_pkr_sqft": 3200,
+      "finishing_pkr_sqft": null,
+      "labour_fraction": null,
+      "evidence": {
+        "source": "User-supplied 2026 indicative ranges; not verified market quotations",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "These are editable seed assumptions. Verify scope, quotation date, taxes and city before use."
+      }
+    }
+  ],
+  "notes": "Created 2026-10-29; creation date is not a market quotation date. User prompt supplied grey PKR 2600–3800, economy turnkey 5200–5800, standard turnkey 6000–8000, premium turnkey 8000–12000, luxury 12000+. Selected scenario values are grey 3200; economy total 5500; standard 7000; premium 10000. These are unverified scenario choices, not observed averages. The grey/finishing split is an explicit modelling assumption, not a measured split. Luxury finishing stays null because an open-ended range has no defensible selected value. Lahore multiplier 1 is a base normalization, not evidence of current local prices. Other city multipliers, material prices, labour shares and fees remain null until supported by quotations. Per-area scope excludes extra charges supplied separately. Units must match BOQ rules exactly; define all bag masses, trolley volumes and material specifications before conversion. To edit safely, validate using tools.cost.RateCatalog and use the settings page when delivered."
+}

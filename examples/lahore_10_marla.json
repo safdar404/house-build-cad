@@ -1,0 +1,69 @@
+{
+  "city": "Lahore",
+  "authority": "LDA",
+  "plot": {
+    "width_m": 9.144,
+    "depth_m": 22.86,
+    "facing": "N",
+    "corner": false,
+    "marla_sqft": 225.0,
+    "declared_area_sqft": 2250.0
+  },
+  "floors": [
+    {
+      "id": "g",
+      "name": "Ground",
+      "level": 0,
+      "height_m": 3.05,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "kitchens": 1,
+      "requested_spaces": []
+    },
+    {
+      "id": "f1",
+      "name": "First",
+      "level": 1,
+      "height_m": 3.05,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "kitchens": 1,
+      "requested_spaces": []
+    },
+    {
+      "id": "f2",
+      "name": "Second",
+      "level": 2,
+      "height_m": 3.05,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "kitchens": 1,
+      "requested_spaces": []
+    }
+  ],
+  "family_size": 6,
+  "car_spaces": 0,
+  "accessibility_needs": [],
+  "stairs_position": "front right",
+  "lift": false,
+  "drawing_dining": "Separate drawing and dining",
+  "tv_lounge": true,
+  "servant_quarter": false,
+  "lawn": false,
+  "budget_pkr": 50000000.0,
+  "quality": "Standard",
+  "style": "Modern concept",
+  "green_features": [
+    "Illustrative solar allowance"
+  ],
+  "start_date": "2026-10-01",
+  "soil_description": null,
+  "assumptions": [
+    {
+      "id": "synthetic",
+      "description": "SYNTHETIC DEMONSTRATION ONLY - not a surveyed, approved or engineered building.",
+      "status": "accepted",
+      "source": "user confirmation required"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "city": "Lahore",
+  "last_updated": "2026-10-29",
+  "standard_day_hours": 8,
+  "wages": [
+    {
+      "trade": "mason",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "labourer",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "steel_fixer",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "shuttering_carpenter",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "electrician",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "plumber",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "tile_fixer",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "painter",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "welder",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    },
+    {
+      "trade": "wood_worker",
+      "daily_wage_pkr": null,
+      "evidence": {
+        "source": "No current local wage quotation supplied",
+        "effective_date": null,
+        "source_url": null,
+        "verified": false,
+        "verified_by": null,
+        "notes": "Enter a dated quotation with the paid-day hours, location, trade scope and included benefits. Null means unpriced, not zero."
+      }
+    }
+  ],
+  "notes": "Editable wage template, created 2026-10-29. Creation date is not a quotation date. No wage amounts or legal minimum wages are asserted. The eight-hour standard day is an unverified planning convention, not a statement of Pakistani labour law; confirm quoted daily hours and scope before accepting assumptions. This file applies only to the city named above; change the city and obtain matching local quotations rather than applying construction-material city multipliers to wages. Add source URL where available, quote effective date and reviewer details. Mark evidence verified only after checking its actual source. Wages exclude overtime, taxes, transport, accommodation and benefits unless the source explicitly includes them. Crews and productivity assumptions are supplied per project, not inferred from these rates. Curing-only dates are unpaid in the current attendance model unless a separate working activity is explicitly scheduled. The labour tool leaves payroll and contract totals unresolved for any used trade with a missing wage. Validate edits with tools.labour.LabourRateCatalog; the settings page will support editing when delivered."
+}

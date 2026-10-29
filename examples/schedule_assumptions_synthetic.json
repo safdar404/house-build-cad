@@ -1,0 +1,114 @@
+{
+  "source": "SYNTHETIC DEMONSTRATION ONLY - not a surveyed, approved or engineered building.",
+  "accepted_for_planning": true,
+  "recipes": [
+    {
+      "kind": "site_prep",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "excavation",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "foundation",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 7
+    },
+    {
+      "kind": "dpc",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "columns",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "brickwork",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "slab",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 7
+    },
+    {
+      "kind": "rough_in",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "waterproofing",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "plaster",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "flooring",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "woodwork",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "paint",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "fixtures",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "external",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    },
+    {
+      "kind": "handover",
+      "productive_days": 3,
+      "crew_size": 3,
+      "curing_days": 0
+    }
+  ],
+  "calendar": {
+    "working_weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "exceptions": []
+  },
+  "max_calendar_days": 3650
+}

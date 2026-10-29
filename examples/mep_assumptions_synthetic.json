@@ -1,0 +1,31 @@
+{
+  "source": "SYNTHETIC DEMONSTRATION ONLY - not a surveyed, approved or engineered building.",
+  "accepted_for_estimation": true,
+  "light_points_per_m2": 0.08,
+  "lighting_watts_per_point": 10.0,
+  "lighting_hours_per_day": 5.0,
+  "sockets_per_habitable_room": 2,
+  "cooling_watts_thermal_per_m2": 100.0,
+  "cooling_cop": 3.0,
+  "cooling_hours_per_day": 4.0,
+  "cooled_room_kinds": [
+    "bedroom",
+    "lounge",
+    "drawing",
+    "dining"
+  ],
+  "water_litres_person_day": 100.0,
+  "storage_days": 2.0,
+  "overhead_storage_fraction": 0.5,
+  "peak_sun_hours": 5.0,
+  "solar_performance_ratio": 0.8,
+  "target_solar_energy_fraction": 0.5,
+  "roof_usable_area_m2": 50.0,
+  "pv_module_area_m2_per_kw": 6.0,
+  "wc_per_bathroom": 1,
+  "basin_per_bathroom": 1,
+  "shower_per_bathroom": 1,
+  "sink_per_kitchen": 1,
+  "gas_points_per_kitchen": 1,
+  "appliances": []
+}

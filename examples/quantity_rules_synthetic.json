@@ -1,0 +1,15 @@
+[
+  {
+    "id": "demo_cement",
+    "description": "Synthetic allowance only, not mix design",
+    "rate_id": "cement_bag",
+    "unit": "bag",
+    "basis": "covered_sqft",
+    "quantity_per_basis_unit": 0.1,
+    "waste_percent": 0,
+    "phase": "grey",
+    "category": "material",
+    "source": "SYNTHETIC DEMONSTRATION ONLY - not a surveyed, approved or engineered building.",
+    "scope_key": "cement_material"
+  }
+]

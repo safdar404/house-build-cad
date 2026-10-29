@@ -1,6 +1,10 @@
 # GharBuilder AI
 
+**Actionable UI update:** Start from the clickable Home cards or the API-free project form. See ACTIONS_UPDATE.md for the exact click-through workflow.
+
 Agentic House Design & Estimation Studio. This ZIP is the complete assembled project; earlier part ZIPs are not required. It includes the corrected NumPy-aware workflow fingerprint helper.
+
+This reviewed edition adds exact-input authorization controls in Workflow Chat. See REVIEW_REPORT.md for the comparison of all 20 supplied archives and the review findings.
 
 ## Run on Windows
 
@@ -29,7 +33,7 @@ Or run `bash run_unix.sh`. Open the local URL printed by Streamlit, normally `ht
 
 Open **Demonstration** and choose **Build separate demonstration workspace**. This creates an isolated, clearly synthetic 10-marla Lahore Ground + 2-floor scenario. Download its exports, or explicitly load it into the workflow pages. Existing session work is replaced only if you choose the replacement checkbox and button.
 
-The ZIP already contains `examples/sample_outputs/GharBuilder_Demonstration_Exports.zip`, a sample PDF, Excel workbook and project metadata. Regenerate them from the command line:
+The downloadable ZIP contains sample outputs. Generated binary samples are excluded from this source repository; generate them from the command line:
 
 ```powershell
 .\.venv\Scripts\python.exe examples\run_sample.py
