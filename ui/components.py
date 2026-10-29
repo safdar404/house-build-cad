@@ -139,6 +139,15 @@ def _available_secrets():
     return None
 
 
+def available_model_ids(credentials: Credentials) -> list[str]:
+    """Explicit user action only; list account model IDs without generating tokens."""
+    try:
+        with OpenAI(api_key=credentials.api_key.get_secret_value(),max_retries=0,timeout=20) as client:
+            return sorted({model.id for model in client.models.list()})
+    except (APIConnectionError,APIStatusError,APITimeoutError):
+        raise AgentError('Could not load account models. Check the key, access and connection, or type your model ID.') from None
+
+
 def _record_probe(response,workspace: WorkspaceState,model: str) -> None:
     usage=getattr(response,'usage',None)
     if usage:
@@ -197,8 +206,24 @@ def sidebar(workspace: WorkspaceState) -> None:
         st.markdown('### GharBuilder AI')
         st.caption('CONNECT → DESCRIBE → GENERATE → REVIEW')
         st.text_input(tr('key'),type='password',key='gh_api_key',help='Your key stays in this session. Server secrets may provide it instead.')
-        model=st.text_input('OpenAI model ID',value=os.environ.get('OPENAI_MODEL',''),key='gh_model_id',
-            placeholder='Enter your model ID',help='Choose a model available to your API project with Responses and function calling.')
+        try:model_credentials=resolve_credentials(st.session_state.get('gh_api_key',''),_available_secrets())
+        except ValueError:model_credentials=None
+        model_identity=hashlib.sha256(model_credentials.api_key.get_secret_value().encode()).hexdigest() if model_credentials else None
+        if st.button('Load available models',disabled=model_credentials is None,key='gh_load_models'):
+            try:
+                with st.spinner('Loading model choices...'):ids=available_model_ids(model_credentials)
+                st.session_state['gh_account_models']=(model_identity,ids)
+            except AgentError as error:st.error(str(error))
+        cached_models=st.session_state.get('gh_account_models')
+        if cached_models and cached_models[0]==model_identity and cached_models[1]:
+            current=st.session_state.get('gh_model_id') or os.environ.get('OPENAI_MODEL','')
+            options=list(dict.fromkeys([*cached_models[1],*([current] if current else [])]))
+            model=st.selectbox('OpenAI model ID',options,index=options.index(current) if current in options else None,
+                accept_new_options=True,key='gh_model_id',placeholder='Select a model or type an ID',
+                help='Choose an accessible model supporting Responses, structured outputs and function calling. Listing a model does not verify those capabilities.') or ''
+        else:
+            model=st.text_input('OpenAI model ID',value=os.environ.get('OPENAI_MODEL',''),key='gh_model_id',
+                placeholder='Load model choices above, or enter an ID',help='Choose a model available to your API project with Responses and function calling.')
         settings=Settings(model=model.strip(),language=st.session_state.get('gh_language','English'),
             theme=st.session_state.get('gh_theme','light'),max_output_tokens=int(st.session_state.get('gh_tokens',6000)),
             max_retries=int(st.session_state.get('gh_retries',2)),max_tool_calls=int(st.session_state.get('gh_tools',30))) if model.strip() else None
@@ -322,14 +347,10 @@ def back_to_home() -> None:
     page=st.session_state.get('gh_home_page')
     if page is not None and st.button('← '+tr('back')):st.switch_page(page)
     workspace=get_workspace(st.session_state)
-    steps=[(Stage.REQUIREMENTS,'pages/requirements_chat.py','Enter or confirm requirements'),
-           (Stage.COMPLIANCE,'pages/floor_plans.py','Review constraints and create floor plans'),
-           (Stage.PLANNING,'pages/floor_plans.py','Generate and select a floor plan'),
-           (Stage.MODEL,'pages/model_3d.py','Build the 3D model')]
-    for stage,path,label in steps:
-        if workspace.record(stage).status!='approved':
-            st.page_link(path,label='Next required step: '+label,icon='➡️')
-            break
+    from ui.journey import next_action
+    label,path,_=next_action(workspace,st.session_state)
+    st.page_link(path,label='Workflow next: '+label,icon='➡️')
+
 
 
 def render_home() -> None:

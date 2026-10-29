@@ -2,6 +2,8 @@
 from __future__ import annotations
 import json
 import streamlit as st
+from ui.choices import source_choice
+from ui.editors import calendar_editor,fill_missing_recipes
 from agents.scheduling_agent import SchedulingAgent,SchedulingInput
 from schemas import Stage,content_hash
 from tools.schedule_4d import (TASK_KINDS,ScheduleAssumptions,TaskRecipe,WorkCalendar,
@@ -19,16 +21,30 @@ def main():
     st.caption('Durations below repeat per applicable floor. They are planning inputs, not measured productivity or structural curing prescriptions.')
     with st.expander('Duration and crew assumptions',expanded=workspace.record(Stage.SCHEDULE).status not in {'review','approved'}):
         rows=[{'kind':k,'productive_days':None,'crew_size':None,'curing_days':None} for k in TASK_KINDS]
-        rows=st.data_editor(rows,key='gh_schedule_recipes_'+key,disabled=['kind'],hide_index=True)
-        source=st.text_input('Duration/crew/curing source',key='gh_schedule_source')
+        seed_key='gh_schedule_seed_'+key;version_key='gh_schedule_editor_version_'+key
+        version=st.session_state.get(version_key,0)
+        rows=st.data_editor(st.session_state.get(seed_key,rows),key='gh_schedule_recipes_'+key+'_'+str(version),disabled=['kind'],hide_index=True,
+            column_config={'productive_days':st.column_config.NumberColumn('Productive days',min_value=1,max_value=3650,step=1),
+                'crew_size':st.column_config.NumberColumn('Crew size',min_value=1,max_value=1000,step=1),
+                'curing_days':st.column_config.NumberColumn('Curing wait (days)',min_value=0,max_value=3650,step=1)})
+        with st.expander('Fill missing recipe cells from my supplied starting values'):
+            st.caption('These are your scenario inputs. Known cells are kept. Review every recipe, especially curing waits; no engineering curing period is recommended here.')
+            col=st.columns(3)
+            days=col[0].selectbox('Productive days starting value',[None,*range(1,31)],format_func=lambda v:'Keep unset' if v is None else str(v))
+            crew=col[1].selectbox('Crew size starting value',[None,*range(1,51)],format_func=lambda v:'Keep unset' if v is None else str(v))
+            cure=col[2].selectbox('Curing days starting value',[None,*range(0,29)],format_func=lambda v:'Keep unset' if v is None else str(v))
+            if st.button('Fill only missing recipe cells'):
+                st.session_state[seed_key]=fill_missing_recipes(rows,days,crew,cure)
+                st.session_state[version_key]=version+1;st.rerun()
+        source=source_choice('Duration/crew/curing source',key='gh_schedule_source')
         start=st.date_input('Construction start date',value=req.start_date)
         calendar_default=read_config('calendar_exceptions.json')
-        calendar_text=st.text_area('Work calendar JSON',value=calendar_default.model_dump_json(indent=2),height=180,
-            help='Weekdays: Monday=0. Ramadan/Eid, holidays and monsoon effects require explicitly sourced date ranges; none are inferred.')
+        try:calendar=calendar_editor(calendar_default,key='gh_schedule_calendar')
+        except ValueError:calendar=None;st.info('Choose working days and complete any added exception rows.')
         horizon=st.number_input('Maximum calendar horizon days',min_value=30,max_value=7300,value=3650)
         try:
             assumptions=ScheduleAssumptions(source=source,accepted_for_planning=True,
-                recipes=[TaskRecipe.model_validate(r) for r in rows],calendar=WorkCalendar.model_validate_json(calendar_text),
+                recipes=[TaskRecipe.model_validate(r) for r in rows],calendar=calendar,
                 max_calendar_days=int(horizon))
             request=SchedulingInput(model_hash=key,start_date=start,assumptions=assumptions)
         except ValueError:request=None

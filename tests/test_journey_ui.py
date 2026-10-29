@@ -32,7 +32,7 @@ def test_connect_success_opens_input_form(monkeypatch):
     app.button(key='gh_connect_continue').click().run()
     assert not app.exception
     assert any(b.label=='Save project draft' for b in app.button)
-    assert any(x.label=='City' for x in app.text_input)
+    assert any(x.label=='City' for x in app.selectbox)
     assert app.session_state['gh_connection'][1] is True
 
 

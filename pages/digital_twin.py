@@ -4,6 +4,7 @@ from datetime import datetime,time
 from zoneinfo import ZoneInfo
 from uuid import uuid4
 import streamlit as st
+from ui.choices import source_choice,choose
 from agents.twin_agent import DigitalTwinAgent
 from schemas import Stage,content_hash
 from tools.twin import (TwinInput,ProgressObservation,SensorSimulation,simulate_sensors,sensor_figures,
@@ -23,10 +24,18 @@ def main():
     as_of=st.date_input('Monitoring as-of date',value=today())
     with st.expander('Record progress and cumulative actual costs'):
         observed=st.date_input('Observation date',value=as_of)
-        source=st.text_input('Observation source / site record reference')
-        entries=st.data_editor([{'activity_id':t.activity.id,'task':t.activity.name,'progress_percent':None,
-            'cumulative_actual_cost_pkr':None} for t in schedule.tasks],disabled=['activity_id','task'],hide_index=True,
-            key='gh_progress_entries_'+content_hash(schedule))
+        source=source_choice('Observation source / site record reference')
+        entry_mode=st.radio('Progress entry method',['One task at a time','Bulk task table'],horizontal=True)
+        if entry_mode=='One task at a time':
+            task=st.selectbox('Observed task',schedule.tasks,format_func=lambda t:t.activity.name+' · '+t.activity.id)
+            percent_choice=st.selectbox('Observed progress percent',[None,0,10,25,50,75,90,100,'Custom'],format_func=lambda v:'Choose observed progress' if v is None else str(v)+'%' if isinstance(v,int) else v)
+            percent=st.number_input('Custom observed progress percent',min_value=0.,max_value=100.,value=None) if percent_choice=='Custom' else percent_choice
+            actual=st.number_input('Cumulative actual task cost PKR (optional)',min_value=0.,value=None)
+            entries=[{'activity_id':task.activity.id,'task':task.activity.name,'progress_percent':percent,'cumulative_actual_cost_pkr':actual}]
+        else:
+            entries=st.data_editor([{'activity_id':t.activity.id,'task':t.activity.name,'progress_percent':None,
+                'cumulative_actual_cost_pkr':None} for t in schedule.tasks],disabled=['activity_id','task'],hide_index=True,
+                key='gh_progress_entries_'+content_hash(schedule),column_config={'progress_percent':st.column_config.NumberColumn('Progress %',min_value=0.,max_value=100.)})
         correction=st.checkbox('Replace a previous record for the same task and observation date')
         if st.button('Save observations'):
             try:
@@ -44,9 +53,9 @@ def main():
             except (ValueError,WorkflowError) as error:st.error(str(error) if isinstance(error,WorkflowError) else 'Check progress/cost values, source and duplicate task dates.')
         st.caption('Blank rows are unreported, not zero progress. Saving observations does not assert independent verification.')
     budget_known=st.checkbox('A like-for-like construction budget is available',value=cost is not None and cost.construction_pkr is not None)
-    budget=st.number_input('Construction budget PKR',min_value=.01,value=float(cost.construction_pkr) if cost and cost.construction_pkr else 1.,step=1000.)
-    budget_source=st.text_input('Budget source',value='Reviewed construction estimate' if cost else 'User-supplied budget')
-    spend_scope=st.text_input('Actual spend scope',value='Construction-only task costs; exclude fees, tax and contingency')
+    budget=st.number_input('Construction budget PKR',min_value=.01,value=float(cost.construction_pkr) if cost and cost.construction_pkr else None,step=1000.)
+    budget_source=choose(st,'Budget source',['Reviewed construction estimate','User-supplied construction budget','Contract construction amount','Budget not available'],'Reviewed construction estimate' if cost else 'Budget not available')
+    spend_scope=choose(st,'Actual spend scope',['Construction-only task costs; exclude fees, tax and contingency','Labour-only reported costs','Material-only reported costs','Mixed costs – scope needs reconciliation'],'Construction-only task costs; exclude fees, tax and contingency')
     complete=st.checkbox('All task costs have been reported with complete matching scope')
     try:
         request=TwinInput(layout=layout,reviewed_layout_hash=content_hash(layout),schedule=schedule,

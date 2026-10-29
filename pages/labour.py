@@ -1,6 +1,7 @@
 """Trade crew allocation, dated wage overrides and contract scenarios."""
 from __future__ import annotations
 import streamlit as st
+from ui.choices import source_choice
 from agents.labour_agent import LabourAgent
 from schemas import Stage,content_hash
 from tools.labour import (LabourInput,TaskCrew,TradeCrew,WageRate,TradeAvailability,workforce_figure)
@@ -36,16 +37,17 @@ def main():
             n=task.activity.crew_size;trade=_suggest_trade(task)
             seed.append({'activity_id':task.activity.id,'main_trade':trade,'main_workers':n if trade=='labourer' else min(1,n),
                          'helpers':0 if trade=='labourer' else max(0,n-1),'schedule_crew':n})
-        rows=st.data_editor(seed,key='gh_trade_crews_'+content_hash(schedule),disabled=['activity_id','schedule_crew'],hide_index=True)
+        rows=st.data_editor(seed,key='gh_trade_crews_'+content_hash(schedule),disabled=['activity_id','schedule_crew'],hide_index=True,
+            column_config={'main_trade':st.column_config.SelectboxColumn('Main trade',options=trades),'main_workers':st.column_config.NumberColumn('Main workers',min_value=0,step=1),'helpers':st.column_config.NumberColumn('Helpers',min_value=0,step=1)})
         valuation=st.date_input('Wage valuation date',value=today())
         st.write('Wages for '+rates.city)
         wage_rows=st.data_editor([{'trade':w.trade,'daily_wage_pkr':w.daily_wage_pkr} for w in rates.wages],
-            key='gh_wage_editor_'+content_hash(rates),disabled=['trade'],hide_index=True)
-        wage_source=st.text_input('Source for any wage changes',key='gh_wage_override_source')
+            key='gh_wage_editor_'+content_hash(rates),disabled=['trade'],hide_index=True,column_config={'daily_wage_pkr':st.column_config.NumberColumn('Daily wage PKR',min_value=0.,help='Enter a dated quotation; unset means unpriced.')})
+        wage_source=source_choice('Source for any wage changes',key='gh_wage_override_source')
         wage_date=st.date_input('Effective date for changed quotations',value=today())
         material_available=st.checkbox('A like-for-like material-only cost allowance is available',value=cost.material_pkr is not None)
         material=st.number_input('Material-only cost PKR',min_value=0.,value=float(cost.material_pkr or 0),step=1000.)
-        source=st.text_input('Material cost source',value='Reviewed cost construction split' if cost.material_pkr is not None else '')
+        source=source_choice('Material cost source',current='Reviewed cost construction split' if cost.material_pkr is not None else None)
         overhead=st.number_input('Payroll overhead percent',min_value=0.,max_value=100.,value=0.)
         margin=st.number_input('Contractor margin percent',min_value=0.,max_value=100.,value=0.)
         try:

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import streamlit as st
+from ui.choices import choose
 
 from agents.base import AgentError
 from agents.bim_agent import BIMAgent
@@ -39,10 +40,12 @@ def main() -> None:
     stored=metadata.get(selected)
     # Element-scoped form keys avoid applying one element's widget state to another.
     with st.form('gh_bim_element_'+content_hash({'model':model_result.input_hash,'element':selected})):
-        material=st.text_input('Material (leave blank if unspecified)',value=stored.material or '' if stored else '')
+        material=choose(st,'Material',['Not specified','Brick masonry','Concrete','Reinforced concrete','Steel','Timber','Glass','Aluminium','Ceramic finish'],stored.material if stored and stored.material else 'Not specified')
+        if material=='Not specified':material=''
         has_cost=st.checkbox('A supplied cost allocation is available',value=stored is not None and stored.cost_pkr is not None)
         cost=st.number_input('Supplied element cost PKR',min_value=0.,value=float(stored.cost_pkr or 0) if stored else 0.,step=100.)
-        phase=st.text_input('Phase',value=stored.phase or '' if stored else '')
+        phase=choose(st,'Phase',['Not assigned','Substructure','Superstructure','Roof','Finishes','Services','Handover'],stored.phase if stored and stored.phase else 'Not assigned')
+        if phase=='Not assigned':phase=''
         start=st.text_input('Planned start label (optional)',value=stored.planned_start or '' if stored else '')
         finish=st.text_input('Planned finish label (optional)',value=stored.planned_finish or '' if stored else '')
         sustainability=st.text_area('Supplied sustainability note',value=stored.sustainability_note or '' if stored else '')

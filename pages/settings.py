@@ -12,6 +12,7 @@ from tools.pricing import PricingCatalog
 from tools.schedule_4d import WorkCalendar
 from ui.components import back_to_home,hero,tr
 from ui.workflow import read_config,protect_secret
+from ui.editors import config_form
 from ui.state import get_workspace,WorkflowError
 
 
@@ -26,8 +27,12 @@ def main():
     try:current=read_config(filename)
     except ValueError:st.error('Configuration cannot be loaded. Restore its JSON from the project package.');return
     st.caption('Changes are private to this session unless local writes are explicitly enabled by the server administrator. Export JSON to retain edits.')
+    mode=st.radio('Settings editor',['Guided fields and tables','Advanced JSON'],horizontal=True)
     with st.form('gh_settings_'+filename):
-        text=st.text_area('Configuration JSON',value=current.model_dump_json(indent=2),height=450)
+        if mode=='Guided fields and tables':
+            edited=config_form(current.model_dump(mode='json'),key='gh_config_form_'+filename)
+            text=json.dumps(edited,ensure_ascii=False,default=str)
+        else:text=st.text_area('Configuration JSON',value=current.model_dump_json(indent=2),height=450)
         accepted=st.checkbox('I reviewed the units, effective dates, source evidence and scope')
         apply=st.form_submit_button('Apply validated session settings')
     if apply:

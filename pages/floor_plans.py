@@ -5,6 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+from ui.choices import choose
 
 from agents.base import AgentError
 from agents.compliance_agent import ComplianceAgent,ComplianceInput,load_bylaws
@@ -75,7 +76,7 @@ def main() -> None:
         columns=st.columns(4);values=[]
         for column,label in zip(columns,['Front','Rear','Left','Right']):
             values.append(column.number_input(label+' setback',min_value=0.,value=0.,step=.1,key='gh_setback_'+label.lower()))
-        source=st.text_input('Source / assumption note',value='User-proposed concept setbacks; authority review pending',key='gh_envelope_source')
+        source=choose(st,'Source / assumption note',['User-proposed concept setbacks; authority review pending','Architect-supplied concept envelope – reference to be checked','Survey / authority document supplied for review'],'User-proposed concept setbacks; authority review pending',key='gh_envelope_source')
         confirmed=st.checkbox('I accept these setbacks for concept exploration and understand authority review is still required',key='gh_envelope_consent')
         if st.button('Save concept envelope',disabled=not confirmed or not source.strip()):
             factor=.3048 if units=='feet' else 1
@@ -99,8 +100,10 @@ def main() -> None:
     st.caption(f'Confirmed concept envelope: {width:.2f} × {depth:.2f} m. Front/left plot offsets: {envelope.front_m:.2f}/{envelope.left_m:.2f} m.')
     runtime=get_runtime(required=False)
     with st.expander('3. Generate or revise alternatives',expanded=workspace.record(Stage.PLANNING).status not in {'approved','review'}):
+        goals=st.multiselect('Layout improvement choices',['Increase bedroom space','Improve daylight','Improve cross-ventilation','Reduce corridor space','Improve privacy','Add storage','Improve accessibility','Separate visitor and family areas'])
         revision=st.text_area('Requested layout change (optional)',value=workspace.revision_notes.get(Stage.PLANNING,''),key='gh_layout_revision',
             help='For changes to plot size, floors or room counts, update Requirements Chat first.')
+        if goals:revision=(revision+'\nRequested priorities: '+', '.join(goals)).strip()
         st.json({'requirements':requirements.model_dump(mode='json'),'envelope':envelope.model_dump(mode='json')},expanded=False)
         accepted=st.checkbox('I reviewed the confirmed brief, concept envelope and requested revision',key='gh_planning_input_consent')
         if runtime is None:st.info('Enter an API key and model ID to generate layout alternatives.')

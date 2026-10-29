@@ -9,8 +9,8 @@ def test_form_save_confirm_and_navigation():
     assert any('Start / edit' in link.label for link in app.get('page_link'))
     app.switch_page('pages/requirements_chat.py').run()
     def field(kind,label):return next(x for x in getattr(app,kind) if x.label==label)
-    for label,value in [('City','Lahore'),('Housing authority / society','User supplied society'),('Architectural style','Modern'),('Stairs position / preference','Front right'),('Drawing / dining arrangement','Separate')]:
-        field('text_input',label).set_value(value)
+    for label,value in [('City','Lahore'),('Housing authority / society','LDA'),('Architectural style','Modern'),('Stairs position / preference','Front right'),('Drawing / dining arrangement','Separate drawing and dining')]:
+        field('selectbox',label).set_value(value)
     field('number_input','Budget PKR').set_value(10000000.)
     field('checkbox','I checked these form values, including dimensions, floor heights and room counts').check()
     field('button','Save project draft').click().run()

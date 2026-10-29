@@ -1,5 +1,7 @@
 # GharBuilder AI
 
+**Guided choices update:** dropdowns, custom entries, room-count/budget patterns, account-model selection and table-based module inputs are available. See [MODULE_GUIDE.md](MODULE_GUIDE.md) for each module's choices and next actions.
+
 **Start here:** enter your API key and model ID, then press **Connect & continue**. You can also select **Enter project details without AI**. Home shows the next required step. See [UX_FLOW_FIX.md](UX_FLOW_FIX.md) for the latest input, logo and theme fixes.
 
 <img src="assets/agent-mark.svg" alt="GharBuilder AI agent logo" width="72" />
