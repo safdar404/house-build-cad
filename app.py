@@ -9,17 +9,24 @@ from __future__ import annotations
 from pathlib import Path
 
 import streamlit as st
-from dotenv import load_dotenv
-
-from ui.components import apply_theme,render_home,sidebar,tr
-from ui.state import get_workspace
 
 ROOT=Path(__file__).resolve().parent
-load_dotenv(ROOT/'.env',override=False)
 
 
 def main() -> None:
     st.set_page_config(page_title='GharBuilder AI',page_icon='🏗️',layout='wide',initial_sidebar_state='expanded')
+    # Cloud uses sidebar/secrets; a local .env file is optional.
+    try:
+        if (ROOT/'.env').is_file():
+            from dotenv import load_dotenv
+            load_dotenv(ROOT/'.env',override=False)
+        from ui.components import apply_theme,render_home,sidebar,tr
+        from ui.state import get_workspace
+    except ModuleNotFoundError as error:
+        st.error('An application dependency is missing: '+str(error.name))
+        st.info('Open Manage app and inspect the dependency installation log. '
+                'Install requirements.txt from the repository root, then reboot the app.')
+        st.stop()
     # Clear widget state before instantiating its password input on this rerun.
     if st.session_state.pop('gh_clear_key_on_rerun',False):
         st.session_state.pop('gh_api_key',None)
