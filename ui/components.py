@@ -7,7 +7,6 @@ or a specialist explicitly runs.
 """
 from __future__ import annotations
 
-import base64
 import hashlib
 import html
 import json
@@ -54,6 +53,26 @@ def apply_theme(theme: str='light') -> None:
     if extra.is_file():st.markdown('<style>'+extra.read_text(encoding='utf-8')+'</style>',unsafe_allow_html=True)
     st.markdown(f'''<style>
     .stApp{{background:{bg};color:{fg};}}
+    :root{{--gh-bg:{bg};--gh-card:{card};--gh-fg:{fg};--gh-border:{border};}}
+    header,[data-testid="stHeader"],[data-testid="stTopNav"],nav{{background:{card}!important;color:{fg}!important;}}
+    header button,nav button,[data-testid="stTopNav"] button{{background:{card}!important;color:{fg}!important;border-color:{border}!important;}}
+    [data-testid="stTopNavPopover"],[data-testid="stTopNavPopoverBody"],
+    [data-testid="stTopNavLink"],[data-testid="stTopNavDropdownLink"],[data-testid="stTopNavSection"]{{background:{card}!important;color:{fg}!important;}}
+    button:disabled{{opacity:.48!important;cursor:not-allowed;}}
+    header button svg,nav button svg{{fill:currentColor;}}
+    [data-testid="stBaseButton-primary"],[data-testid="stBaseButton-primary"] p,[data-testid="stBaseButton-primary"] span{{color:#ffffff!important;}}
+    [data-testid="stBaseButton-secondary"],[data-testid="stBaseButton-tertiary"],
+    [data-testid="stPageLink-NavLink"],button[kind="secondary"],button[kind="tertiary"]{{background:{card}!important;color:{fg}!important;border-color:{border}!important;}}
+    [data-baseweb="select"]>div,[data-baseweb="input"],[data-baseweb="base-input"],
+    [data-testid="stTextArea"] textarea,[data-testid="stNumberInput"] input{{background:{card}!important;color:{fg}!important;border-color:{border}!important;}}
+    [data-baseweb="popover"],[data-baseweb="popover"] ul,[data-baseweb="menu"],
+    [data-testid="stPopoverBody"],[data-testid="stMainMenuPopover"],
+    [role="menu"],[role="listbox"],[role="option"]{{background:{card}!important;color:{fg}!important;}}
+    [role="menuitem"],[data-baseweb="popover"] button,[data-baseweb="popover"] li{{color:{fg}!important;background:{card}!important;}}
+    input,textarea{{color:{fg}!important;caret-color:{fg};}}
+    [data-testid="stExpander"] summary,[data-testid="stExpander"] details{{background:{card}!important;color:{fg}!important;}}
+    [data-testid="stTabs"] button{{color:{fg}!important;}}
+
     .block-container{{max-width:1480px;padding-top:1.4rem;padding-bottom:2rem;}}
     [data-testid="stWidgetLabel"] p,[data-testid="stMarkdownContainer"]{{color:{fg};}}
     [data-testid="stSidebar"]{{background:{card};border-right:1px solid {border};}}
@@ -77,8 +96,14 @@ def apply_theme(theme: str='light') -> None:
 
 def hero(title: str='🏗️ GharBuilder AI',subtitle: str='Agentic House Design & Estimation Studio') -> None:
     logo=Path(__file__).resolve().parents[1]/'assets'/'agent-mark.svg'
-    mark=('<img alt="GharBuilder agent" width="56" height="56" style="float:left;margin-right:14px" src="data:image/svg+xml;base64,'+base64.b64encode(logo.read_bytes()).decode()+'">') if logo.is_file() else ''
-    st.markdown('<div class="gh-hero">'+mark+'<h1>'+html.escape(title)+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
+    if logo.is_file():
+        mark,heading=st.columns([1,14],vertical_alignment='center')
+        mark.image(str(logo),width=56)
+        with heading:
+            st.markdown('<div class="gh-hero"><h1>'+html.escape(title.replace('🏗️ ',''))+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="gh-hero"><h1>'+html.escape(title)+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
+
 
 
 def stage_stepper(workspace: WorkspaceState) -> None:
@@ -100,7 +125,7 @@ def metric_cards(workspace: WorkspaceState) -> None:
     labour=safe_output(workspace,Stage.LABOUR)
     try:layout=workspace.selected_layout()
     except WorkflowError:layout=None
-    values=[('Construction PKR',f'{cost.construction_pkr:,.0f}' if cost and cost.construction_pkr is not None else 'Unresolved'),
+    values=[('Construction PKR',f'{cost.construction_pkr:,.0f}' if cost and cost.construction_pkr is not None else '—'),
             ('Covered m²',f'{sum(f.covered_area_m2 for f in layout.floors):,.1f}' if layout else '—'),
             ('Calendar days',str(schedule.duration_calendar_days) if schedule else '—'),
             ('Peak workers',str(labour.peak_workers) if labour else '—')]
@@ -155,54 +180,66 @@ def get_runtime(required: bool=True) -> Runtime | None:
         if required:st.info('Enter your API key and a model ID in the sidebar to use AI agents.')
         return None
     workspace=get_workspace(st.session_state)
-    signature=hashlib.sha256((credentials.api_key.get_secret_value()+settings.model_dump_json()).encode()).hexdigest()
+    signature=hashlib.sha256((credentials.api_key.get_secret_value()+settings.model_dump_json(exclude={'theme'})).encode()).hexdigest()
     runtime=st.session_state.get('gh_runtime')
-    if runtime is None or st.session_state.get('gh_runtime_signature')!=signature:
+    if runtime is None or runtime.workspace is not workspace or st.session_state.get('gh_runtime_signature')!=signature:
         if runtime is not None:runtime.orchestrator.close()
         runtime=Runtime(settings,credentials,workspace,OrchestratorAgent(state=workspace,
                         settings=settings,credentials=credentials,usage_log=workspace.project.usage))
         st.session_state['gh_runtime']=runtime;st.session_state['gh_runtime_signature']=signature
+    runtime.settings.theme=settings.theme
+    runtime.orchestrator.settings.theme=settings.theme
     return runtime
 
 
 def sidebar(workspace: WorkspaceState) -> None:
     with st.sidebar:
         st.markdown('### GharBuilder AI')
-        st.caption('AGENTIC DESIGN STUDIO')
-        st.selectbox('Language / زبان',['English','Urdu'],key='gh_language')
-        st.selectbox('Appearance',['light','dark'],key='gh_theme')
-        project_name=st.text_input(tr('project'),value=workspace.project.name,max_chars=100)
-        if project_name!=workspace.project.name:
-            workspace.project.name=project_name
-            workspace.invalidate(Stage.REPORT)
-        st.text_input(tr('key'),type='password',key='gh_api_key',help='Session only. Server secrets/environment may also provide the key.')
-        model=st.text_input('OpenAI model ID',value=os.environ.get('OPENAI_MODEL',''),key='gh_model_id',help='Use a model available to your API project with Responses/tool support.')
-        with st.expander('Agent limits'):
-            tokens=st.number_input('Maximum output tokens',min_value=256,max_value=32000,value=6000,step=256)
-            retries=st.number_input('Validation retries',min_value=0,max_value=5,value=2)
-            tool_calls=st.number_input('Maximum workflow tool calls',min_value=1,max_value=100,value=30)
-        settings=Settings(model=model.strip(),language=st.session_state.gh_language,
-            theme=st.session_state.gh_theme,max_output_tokens=int(tokens),max_retries=int(retries),
-            max_tool_calls=int(tool_calls)) if model.strip() else None
+        st.caption('CONNECT → DESCRIBE → GENERATE → REVIEW')
+        st.text_input(tr('key'),type='password',key='gh_api_key',help='Your key stays in this session. Server secrets may provide it instead.')
+        model=st.text_input('OpenAI model ID',value=os.environ.get('OPENAI_MODEL',''),key='gh_model_id',
+            placeholder='Enter your model ID',help='Choose a model available to your API project with Responses and function calling.')
+        settings=Settings(model=model.strip(),language=st.session_state.get('gh_language','English'),
+            theme=st.session_state.get('gh_theme','light'),max_output_tokens=int(st.session_state.get('gh_tokens',6000)),
+            max_retries=int(st.session_state.get('gh_retries',2)),max_tool_calls=int(st.session_state.get('gh_tools',30))) if model.strip() else None
         st.session_state['gh_settings']=settings
         try:credentials=resolve_credentials(st.session_state.get('gh_api_key',''),_available_secrets())
-        except ValueError:credentials=None;st.error('The API key contains invalid whitespace.')
+        except ValueError:credentials=None;st.error('Remove whitespace from the API key.')
+        if credentials and not settings:st.warning('Key entered. Add a model ID to activate AI.')
         cached_runtime=st.session_state.get('gh_runtime')
         if cached_runtime is not None and (credentials is None or settings is None
-            or cached_runtime.credentials.api_key!=credentials.api_key
-            or cached_runtime.settings!=settings):
+            or cached_runtime.credentials.api_key!=credentials.api_key or cached_runtime.settings.model_dump(exclude={'theme'})!=settings.model_dump(exclude={'theme'})):
             cached_runtime.orchestrator.close()
-            st.session_state.pop('gh_runtime',None)
-            st.session_state.pop('gh_runtime_signature',None)
+            st.session_state.pop('gh_runtime',None);st.session_state.pop('gh_runtime_signature',None)
         identity=hashlib.sha256((credentials.api_key.get_secret_value()+model).encode()).hexdigest() if credentials and model else None
+        if st.button('Connect & continue →',key='gh_connect_continue',type='primary',use_container_width=True):
+            if not credentials:st.error('Enter your OpenAI API key above, or use the project form below without AI.')
+            elif not settings:st.error('Enter a model ID above so the agent knows which LLM to use.')
+            else:
+                result=st.session_state.get('gh_connection')
+                if not result or result[0]!=identity or not result[1]:
+                    with st.spinner('Checking your key and model...'):ok,message=_probe(credentials,settings,workspace)
+                    result=(identity,ok,message);st.session_state['gh_connection']=result
+                if result[1]:st.session_state['gh_next_page']='pages/requirements_chat.py'
+        if st.button('Enter project details without AI',key='gh_form_without_ai',use_container_width=True):
+            st.session_state['gh_next_page']='pages/requirements_chat.py'
         if st.button(tr('test'),disabled=not bool(credentials and settings)):
-            with st.spinner('Checking API connection...'):
-                ok,message=_probe(credentials,settings,workspace)
+            with st.spinner('Checking API connection...'):ok,message=_probe(credentials,settings,workspace)
             st.session_state['gh_connection']=(identity,ok,message)
         result=st.session_state.get('gh_connection')
         if result and result[0]==identity:
             (st.success if result[1] else st.error)(('✅ ' if result[1] else '❌ ')+result[2])
-        else:st.caption('Connection not tested for the current key/model.')
+        elif credentials and settings:st.caption('Ready to connect. Press Connect & continue above.')
+        with st.expander('Appearance & project'):
+            st.selectbox('Language / زبان',['English','Urdu'],key='gh_language')
+            st.selectbox('Appearance',['light','dark'],key='gh_theme')
+            project_name=st.text_input(tr('project'),value=workspace.project.name,max_chars=100)
+            if project_name!=workspace.project.name:
+                workspace.project.name=project_name;workspace.invalidate(Stage.REPORT)
+        with st.expander('Agent limits'):
+            st.number_input('Maximum output tokens',min_value=256,max_value=32000,value=6000,step=256,key='gh_tokens')
+            st.number_input('Validation retries',min_value=0,max_value=5,value=2,key='gh_retries')
+            st.number_input('Maximum workflow tool calls',min_value=1,max_value=100,value=30,key='gh_tools')
         usage=workspace.project.usage
         try:
             from ui.workflow import read_config
@@ -305,7 +342,17 @@ def render_home() -> None:
         st.subheader('🤖 Your design agent')
         st.write('Brief → concepts → CAD / 3D / IFC → schedule → costs → monitoring. Ask the agent to inspect progress and run reviewed tools.')
         st.page_link('pages/workflow_chat.py',label='Open Agent Studio',icon='⚡')
-    stage_stepper(workspace);metric_cards(workspace)
+    from ui.journey import next_action
+    label,path,description=next_action(workspace,st.session_state)
+    with st.container(border=True):
+        st.subheader('Next: '+label)
+        st.write(description)
+        st.page_link(path,label='Continue → '+label,icon='➡️')
+    approved=sum(workspace.record(stage).status=='approved' for stage in Stage)
+    st.progress(approved/len(Stage),text=str(approved)+' of '+str(len(Stage))+' stages reviewed')
+    with st.expander('Detailed workflow status'):
+        stage_stepper(workspace)
+    metric_cards(workspace)
     st.markdown('<div class="gh-brick"></div>',unsafe_allow_html=True)
     features=[('💬 Guided requirements','Describe your household, plot and priorities, then review the extracted brief.'),
               ('📐 Coordinated concepts','Compare floor alternatives and inspect dimensions, access routes and room zones.'),

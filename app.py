@@ -14,7 +14,9 @@ ROOT=Path(__file__).resolve().parent
 
 
 def main() -> None:
-    st.set_page_config(page_title='GharBuilder AI',page_icon='🏗️',layout='wide',initial_sidebar_state='expanded')
+    st.set_page_config(page_title='GharBuilder AI · Agent Studio',page_icon=str(ROOT/'assets'/'agent-mark.svg'),layout='wide',initial_sidebar_state='expanded')
+    logo=ROOT/'assets'/'agent-mark.svg'
+    if logo.is_file():st.logo(str(logo),icon_image=str(logo),size='large')
     # Cloud uses sidebar/secrets; a local .env file is optional.
     try:
         if (ROOT/'.env').is_file():
@@ -59,6 +61,8 @@ def main() -> None:
         'Monitor & Export':[registered[n] for n in ['digital_twin.py','downloads.py'] if n in registered],
         'Settings':[registered[n] for n in ['settings.py','demo.py'] if n in registered]}
     selected=st.navigation({name:items for name,items in groups.items() if items},position='top')
+    target=st.session_state.pop('gh_next_page',None)
+    if target:st.switch_page(target)
     selected.run()
 
 

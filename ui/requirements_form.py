@@ -9,6 +9,8 @@ def render_project_form(save_draft):
         st.caption('Save your draft, review the normalized brief below, then confirm it. Changing requirements makes dependent outputs stale.')
         try:old=Requirements.model_validate_json(st.session_state.get('gh_requirements_draft','{}'))
         except ValueError:old=None
+        st.caption('Save your draft before changing the floor count, so existing entries can be retained.')
+        floor_count=st.number_input('Number of floors to configure',min_value=1,max_value=24,value=len(old.floors) if old else 1,key='gh_form_floor_count')
         with st.form('project_input_form'):
             a,b=st.columns(2)
             city=a.text_input('City',value=old.city if old else '')
@@ -20,7 +22,7 @@ def render_project_form(save_draft):
             marla=b.selectbox('Square feet per marla',[225.,272.25],index=1 if old and old.plot.marla_sqft==272.25 else 0)
             corner=a.checkbox('Corner plot',value=old.plot.corner if old else False)
             family=b.number_input('Family members',min_value=1,max_value=100,value=old.family_size if old else 1)
-            budget=a.number_input('Budget PKR',min_value=1.,value=float(old.budget_pkr) if old else 1.)
+            budget=a.number_input('Budget PKR',min_value=1.,value=float(old.budget_pkr) if old else None)
             qualities=['Grey only','Economy','Standard','Premium','Luxury']
             quality=b.selectbox('Construction quality',qualities,index=qualities.index(old.quality) if old else 2)
             style=a.text_input('Architectural style',value=old.style if old else '')
@@ -35,12 +37,16 @@ def render_project_form(save_draft):
             servant=a.checkbox('Servant quarter',value=old.servant_quarter if old else False)
             lawn=b.checkbox('Lawn',value=old.lawn if old else False)
             st.write('Edit floors below; add/delete rows. Levels: basement −1, ground 0, first 1. Review the proposed 3.05 m height or change it.')
-            rows=[f.model_dump(include={'id','name','level','height_m','bedrooms','bathrooms','kitchens'}) for f in old.floors] if old else [dict(id='g',name='Ground',level=0,height_m=3.05,bedrooms=0,bathrooms=0,kitchens=0)]
-            floors=st.data_editor(rows,num_rows='dynamic',key='gh_floor_entry')
+            existing=[f.model_dump(include={'id','name','level','height_m','bedrooms','bathrooms','kitchens'}) for f in old.floors] if old else []
+            rows=[existing[i] if i<len(existing) else dict(id='floor_'+str(i),name='Ground' if i==0 else 'Floor '+str(i),level=i,height_m=3.05,bedrooms=0,bathrooms=0,kitchens=0) for i in range(int(floor_count))]
+            floors=st.data_editor(rows,num_rows='dynamic',key='gh_floor_entry_'+str(floor_count))
             reviewed=st.checkbox('I checked these form values, including dimensions, floor heights and room counts')
             submitted=st.form_submit_button('Save project draft',type='primary')
         if submitted:
             if not reviewed:st.error('Check the form values and tick the review box first.');return
+            missing=[label for label,value in [('City',city),('Housing authority / society',authority),('Architectural style',style),('Stairs preference',stairs),('Drawing / dining arrangement',dining)] if not value.strip()]
+            if budget is None:missing.append('Budget PKR')
+            if missing:st.error('Please complete: '+', '.join(missing));return
             try:
                 split=lambda s:[x.strip() for x in s.split(',') if x.strip()]
                 req=Requirements(city=city.strip(),authority=authority.strip(),plot=Plot(width_m=width*.3048,depth_m=depth*.3048,facing=facing,corner=corner,marla_sqft=marla),

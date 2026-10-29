@@ -1,5 +1,7 @@
 # GharBuilder AI
 
+**Start here:** enter your API key and model ID, then press **Connect & continue**. You can also select **Enter project details without AI**. Home shows the next required step. See [UX_FLOW_FIX.md](UX_FLOW_FIX.md) for the latest input, logo and theme fixes.
+
 <img src="assets/agent-mark.svg" alt="GharBuilder AI agent logo" width="72" />
 
 **Agent Studio:** use your own API key and model to inspect project facts, plan next steps, execute reviewed specialist tools and request revisions. Compact grouped navigation keeps connection controls visible. Read [AGENTIC_UPGRADE.md](AGENTIC_UPGRADE.md) for the automation scope and click-through workflow.
