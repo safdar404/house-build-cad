@@ -139,6 +139,15 @@ def _available_secrets():
     return None
 
 
+def agent_model_choices(ids: list[str]) -> list[str]:
+    """Conservative text-agent candidates, not a capability/access guarantee."""
+    excluded=('audio','realtime','transcrib','tts','search','image','instruct','chat-latest','codex')
+    candidates=[m for m in ids if m.startswith(('gpt-4o','gpt-4.1','gpt-5','gpt-6','o3','o4'))
+                and not any(part in m.lower() for part in excluded)]
+    preferred=['gpt-4.1-mini','gpt-4o-mini','gpt-5-mini','gpt-4.1','gpt-4o']
+    return sorted(set(candidates),key=lambda m:(preferred.index(m) if m in preferred else len(preferred),m))
+
+
 def available_model_ids(credentials: Credentials) -> list[str]:
     """Explicit user action only; list account model IDs without generating tokens."""
     try:
@@ -160,14 +169,20 @@ def _record_probe(response,workspace: WorkspaceState,model: str) -> None:
 def _probe(credentials: Credentials,settings: Settings,workspace: WorkspaceState) -> tuple[bool,str]:
     try:
         with OpenAI(api_key=credentials.api_key.get_secret_value(),max_retries=0,timeout=20) as client:
-            response=client.responses.create(model=settings.model,input='Reply OK.',max_output_tokens=16,store=False)
+            response=client.responses.create(model=settings.model,input='Reply OK.',max_output_tokens=256,store=False)
         _record_probe(response,workspace,settings.model)
         return True,'API connected; the selected model accepted the request.'
     except AuthenticationError:return False,'Authentication failed. Check your API key.'
     except PermissionDeniedError:return False,'This API project cannot access the selected model.'
     except RateLimitError:return False,'API quota or rate limit reached. Check API billing and limits.'
     except (APIConnectionError,APITimeoutError):return False,'Connection failed or timed out. Try again.'
-    except APIStatusError:return False,'Request failed. Check the model ID and its Responses API support.'
+    except APIStatusError as error:
+        body=error.body if isinstance(error.body,dict) else {}
+        details=body.get('error',body)
+        code=details.get('code') if isinstance(details,dict) else None
+        if code=='model_not_found':return False,'Model unavailable for this API project. Load models and select a text-agent model.'
+        if code=='insufficient_quota':return False,'API credit/quota exhausted. Check API project billing; changing models will not fix billing.'
+        return False,f'API request rejected (HTTP {error.status_code}). Select a text-agent model; check project permissions and Responses API support.' 
 
 
 @dataclass
@@ -217,10 +232,14 @@ def sidebar(workspace: WorkspaceState) -> None:
         cached_models=st.session_state.get('gh_account_models')
         if cached_models and cached_models[0]==model_identity and cached_models[1]:
             current=st.session_state.get('gh_model_id') or os.environ.get('OPENAI_MODEL','')
-            options=list(dict.fromkeys([*cached_models[1],*([current] if current else [])]))
-            model=st.selectbox('OpenAI model ID',options,index=options.index(current) if current in options else None,
+            options=agent_model_choices(cached_models[1])
+            if current and current not in options:
+                if current in cached_models[1]:st.session_state['gh_model_id']=None
+                else:options.append(current)
+            st.caption('Text-agent candidates only. Connection test verifies access. Custom IDs can be typed.')
+            model=st.selectbox('OpenAI model ID',options,index=None,
                 accept_new_options=True,key='gh_model_id',placeholder='Select a model or type an ID',
-                help='Choose an accessible model supporting Responses, structured outputs and function calling. Listing a model does not verify those capabilities.') or ''
+                help='Choose an accessible model supporting Responses, structured outputs and function calling. Listing a model does not verify those capabilities. Video, image and audio models are excluded.') or ''
         else:
             model=st.text_input('OpenAI model ID',value=os.environ.get('OPENAI_MODEL',''),key='gh_model_id',
                 placeholder='Load model choices above, or enter an ID',help='Choose a model available to your API project with Responses and function calling.')

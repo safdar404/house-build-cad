@@ -37,13 +37,18 @@ def test_requirement_controls_offer_design_choices_and_room_pattern():
 
 def test_account_model_choices_load_only_on_request(monkeypatch):
     calls=[]
-    monkeypatch.setattr('ui.components.available_model_ids',lambda credentials:(calls.append(True) or ['account-model-a','account-model-b']))
+    monkeypatch.setattr('ui.components.available_model_ids',lambda credentials:(calls.append(True) or ['gpt-4.1-mini','gpt-4o-mini','sora-2','text-embedding-3-small']))
     app=AppTest.from_file(str(ROOT/'app.py'),default_timeout=60).run()
     assert not calls
     app.text_input(key='gh_api_key').set_value('offline-not-real').run()
     app.button(key='gh_load_models').click().run()
     assert not app.exception and calls==[True]
-    assert {'account-model-a','account-model-b'}<=set(app.selectbox(key='gh_model_id').options)
+    assert {'gpt-4.1-mini','gpt-4o-mini'}==set(app.selectbox(key='gh_model_id').options)
+    app.selectbox(key='gh_model_id').set_value('gpt-4o-mini').run()
+    assert app.selectbox(key='gh_model_id').value=='gpt-4o-mini'
+    app.run()
+    assert app.selectbox(key='gh_model_id').value=='gpt-4o-mini'
+
 
 
 @pytest.mark.parametrize('page',['estimation','schedule','settings','engineering'])
@@ -88,3 +93,10 @@ def test_estimate_table_controls_generate_real_result(demo):
     workspace=app.session_state['gharbuilder_workspace']
     assert workspace.record(Stage.COST).status=='review'
     assert workspace.outputs[Stage.COST].construction_pkr is not None
+
+
+def test_model_candidates_exclude_non_agent_modalities():
+    from ui.components import agent_model_choices
+    assert agent_model_choices(['sora-2','gpt-image-1','text-embedding-3-small',
+        'gpt-4o-audio-preview','gpt-4o-realtime-preview','gpt-4o-mini','gpt-4.1-mini'])==[
+        'gpt-4.1-mini','gpt-4o-mini']
