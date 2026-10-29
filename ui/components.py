@@ -7,6 +7,7 @@ or a specialist explicitly runs.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import html
 import json
@@ -75,7 +76,9 @@ def apply_theme(theme: str='light') -> None:
 
 
 def hero(title: str='🏗️ GharBuilder AI',subtitle: str='Agentic House Design & Estimation Studio') -> None:
-    st.markdown('<div class="gh-hero"><h1>'+html.escape(title)+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
+    logo=Path(__file__).resolve().parents[1]/'assets'/'agent-mark.svg'
+    mark=('<img alt="GharBuilder agent" width="56" height="56" style="float:left;margin-right:14px" src="data:image/svg+xml;base64,'+base64.b64encode(logo.read_bytes()).decode()+'">') if logo.is_file() else ''
+    st.markdown('<div class="gh-hero">'+mark+'<h1>'+html.escape(title)+'</h1><p>'+html.escape(subtitle)+'</p></div>',unsafe_allow_html=True)
 
 
 def stage_stepper(workspace: WorkspaceState) -> None:
@@ -164,7 +167,8 @@ def get_runtime(required: bool=True) -> Runtime | None:
 
 def sidebar(workspace: WorkspaceState) -> None:
     with st.sidebar:
-        st.markdown('### 🏗️ GharBuilder AI')
+        st.markdown('### GharBuilder AI')
+        st.caption('AGENTIC DESIGN STUDIO')
         st.selectbox('Language / زبان',['English','Urdu'],key='gh_language')
         st.selectbox('Appearance',['light','dark'],key='gh_theme')
         project_name=st.text_input(tr('project'),value=workspace.project.name,max_chars=100)
@@ -297,6 +301,10 @@ def render_home() -> None:
     a,b=st.columns(2)
     with a:st.page_link('pages/requirements_chat.py',label='Start / edit my house project',icon='🏗️')
     with b:st.page_link('pages/demo.py',label='Try the working demonstration — no API key',icon='▶️')
+    with st.container(border=True):
+        st.subheader('🤖 Your design agent')
+        st.write('Brief → concepts → CAD / 3D / IFC → schedule → costs → monitoring. Ask the agent to inspect progress and run reviewed tools.')
+        st.page_link('pages/workflow_chat.py',label='Open Agent Studio',icon='⚡')
     stage_stepper(workspace);metric_cards(workspace)
     st.markdown('<div class="gh-brick"></div>',unsafe_allow_html=True)
     features=[('💬 Guided requirements','Describe your household, plot and priorities, then review the extracted brief.'),

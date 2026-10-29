@@ -1,1 +1,20 @@
-.gh-blueprint-note { background-image: linear-gradient(#1e88e511 1px, transparent 1px), linear-gradient(90deg,#1e88e511 1px,transparent 1px); background-size:20px 20px; border-radius:14px; padding:16px; }
+/* Compact agent workspace. Native widgets remain keyboard accessible. */
+.block-container {padding-top:1rem!important;padding-bottom:1.5rem!important;max-width:1480px;}
+[data-testid="stVerticalBlock"] {gap:.65rem;}
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {gap:.45rem;}
+h1 {font-size:1.8rem!important;letter-spacing:-.035em;}
+h2 {font-size:1.25rem!important;letter-spacing:-.02em;}
+h3 {font-size:1.03rem!important;}
+[data-testid="stMetricValue"] {font-size:1.65rem!important;}
+[data-testid="stMetric"] {padding:12px!important;border-radius:12px!important;box-shadow:none!important;}
+[data-testid="stExpander"] {border-radius:12px!important;}
+[data-testid="stChatMessage"] {border-radius:14px;padding:14px;}
+.gh-hero {padding:17px 21px!important;border-radius:16px!important;margin-bottom:9px!important;}
+.gh-hero h1 {font-size:1.85rem!important;}
+.gh-hero p {font-size:.9rem;}
+.gh-step {min-width:94px!important;padding:6px 9px!important;font-size:.72rem!important;}
+.gh-brick {display:none;}
+.stButton>button,.stDownloadButton>button {min-height:2.2rem!important;border-radius:9px!important;}
+[data-testid="stBaseButton-primary"] {background:linear-gradient(110deg,#2563eb,#6d28d9);border:0;color:white;}
+a:focus-visible,button:focus-visible,input:focus-visible {outline:3px solid #f59e0b!important;outline-offset:3px;}
+@media(max-width:700px){.block-container{padding-left:.8rem!important;padding-right:.8rem!important}.gh-hero h1{font-size:1.5rem!important}}

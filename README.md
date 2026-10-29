@@ -1,5 +1,9 @@
 # GharBuilder AI
 
+<img src="assets/agent-mark.svg" alt="GharBuilder AI agent logo" width="72" />
+
+**Agent Studio:** use your own API key and model to inspect project facts, plan next steps, execute reviewed specialist tools and request revisions. Compact grouped navigation keeps connection controls visible. Read [AGENTIC_UPGRADE.md](AGENTIC_UPGRADE.md) for the automation scope and click-through workflow.
+
 **Actionable UI update:** Start from the clickable Home cards or the API-free project form. See ACTIONS_UPDATE.md for the exact click-through workflow.
 
 Agentic House Design & Estimation Studio. This ZIP is the complete assembled project; earlier part ZIPs are not required. It includes the corrected NumPy-aware workflow fingerprint helper.

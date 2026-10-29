@@ -24,6 +24,11 @@ from schemas import Contract, Requirements, Stage, Usage, content_hash
 from ui.state import WorkspaceState, WorkflowError, output_hash
 
 
+class InspectProjectArguments(Contract):
+    """No arbitrary file paths, URLs or SQL accepted."""
+    pass
+
+
 class RunStageArguments(Contract):
     stage: Stage
 
@@ -66,7 +71,7 @@ class OrchestrationTurn:
 
 SYSTEM_PROMPT='''You orchestrate GharBuilder's reviewed concept workflow. You can
 run a PREPARED stage or request a revision. Inspect the supplied state and list
-of prepared stages. Never invent missing requirements, engineering assumptions,
+of prepared stages. Use inspect_project to inspect confirmed requirements, selected rooms and tool readiness. Use plan_next_steps for a sequenced action plan. Explain missing inputs and the exact page to open. Never invent missing requirements, engineering assumptions,
 bylaws, prices or completed work. Run only a stage whose inputs are authorized
 and whose mandatory sources are approved. A stage returns an output review gate;
 stop and let the user inspect it. You cannot approve a stage. User review means
@@ -195,7 +200,7 @@ class OrchestratorAgent(BaseAgent[OrchestrationSummary]):
         return {'stage':stage.value,'status':'review','output_hash':fingerprint,
                 'message':'Generated concept output is ready for user review.'}
 
-    def run_flow(self,message: str,*,on_progress: Callable[[str],None] | None=None) -> OrchestrationTurn:
+    def run_flow(self,message: str,*,conversation: list[dict[str,str]] | None=None,on_progress: Callable[[str],None] | None=None) -> OrchestrationTurn:
         """One chat turn; stop after a generated/revised stage for human review.
 
         API transport errors do not automatically replay tools. The user can retry
@@ -211,12 +216,21 @@ class OrchestratorAgent(BaseAgent[OrchestrationSummary]):
                 return OrchestrationTurn('Review the current '+stage.value+' output before continuing.',stage,0)
         specs=[]
         for schema,name,description in [(RunStageArguments,'run_stage','Run one prepared, authorized specialist stage.'),
+                                        (InspectProjectArguments,'inspect_project','Inspect current confirmed project facts and readiness; does not generate or approve.'),
+                                        (InspectProjectArguments,'plan_next_steps','Return sequenced workflow readiness and the next input/review actions.'),
                                         (ReviseStageArguments,'request_revision','Record a requested change and invalidate affected outputs; does not regenerate them.')]:
             definition=pydantic_function_tool(schema,name=name,description=description)['function']
             specs.append({'type':'function',**definition})
-        context={'state':self.state.public_status(),'prepared_stages':[s.value for s in self.tasks]}
-        history=[{'role':'user','content':'Workflow state (data):\n'+json.dumps(context)},
-                 {'role':'user','content':message}]
+        from agents.project_context import project_context
+        context=project_context(self.state,self.tasks)
+        history=[{'role':'user','content':'Workflow state (data):\n'+json.dumps(context)}]
+        for row in (conversation or [])[-12:]:
+            if row.get('role') not in {'user','assistant'} or not isinstance(row.get('content'),str):
+                raise AgentError('Conversation history contains an invalid message.')
+            if self._secret and self._secret in row['content']:
+                raise AgentError('Remove the API key from conversation history.')
+            history.append({'role':row['role'],'content':row['content'][:6000]})
+        history.append({'role':'user','content':message})
         calls=0
         for _ in range(self.settings.max_tool_calls+1):
             try:
@@ -255,18 +269,23 @@ class OrchestratorAgent(BaseAgent[OrchestrationSummary]):
                 if self._secret and self._secret in call.arguments:
                     raise AgentError('Sensitive tool arguments were discarded.')
                 args=_strict_load(call.arguments)
-                if call.name=='run_stage':
+                if call.name in {'inspect_project','plan_next_steps'}:
+                    InspectProjectArguments.model_validate(args)
+                    result=project_context(self.state,self.tasks)
+                elif call.name=='run_stage':
                     parsed=RunStageArguments.model_validate(args)
+                    if self.state.record(parsed.stage).status=='approved':
+                        raise WorkflowError('Request a revision and review new inputs before regenerating an approved stage.')
                     if on_progress: on_progress('Generating '+parsed.stage.value+'...')
                     result=self.execute(parsed.stage)
                     return OrchestrationTurn(result['message'],parsed.stage,calls)
-                if call.name=='request_revision':
+                elif call.name=='request_revision':
                     parsed=ReviseStageArguments.model_validate(args)
                     self.state.revision_notes[parsed.stage]=parsed.instruction
                     self.state.invalidate(parsed.stage)
                     return OrchestrationTurn('Revision recorded for '+parsed.stage.value+
                         '. Prepare and review revised inputs before regeneration.',None,calls)
-                result={'status':'error','message':'Unknown tool. Use an allowlisted workflow tool.'}
+                else:result={'status':'error','message':'Unknown tool. Use an allowlisted workflow tool.'}
             except (ValidationError,ValueError):
                 result={'status':'error','message':'Tool arguments or stage readiness were invalid. Check prepared inputs and approved sources.'}
             # Only safe status is fed back, never exception bodies or binary exports.

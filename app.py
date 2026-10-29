@@ -44,13 +44,21 @@ def main() -> None:
         ('model_3d.py','model','🏠'),('bim_ifc.py','bim','🧩'),('schedule.py','schedule','📅'),
         ('estimation.py','cost','💰'),('labour.py','labour','👷'),('digital_twin.py','twin','📊'),
         ('downloads.py','downloads','📦'),('settings.py','settings','⚙️'),
-        ('engineering.py','Engineering allowances','🔧'),('workflow_chat.py','Workflow agent','🤖'),('demo.py','Demonstration','🧪'),
+        ('engineering.py','Engineering allowances','🔧'),('workflow_chat.py','Agent Studio','🤖'),('demo.py','Demonstration','🧪'),
     ]
     pages=[home]
+    registered={}
     for filename,label,icon in definitions:
         path=ROOT/'pages'/filename
-        if path.is_file():pages.append(st.Page(str(path),title=tr(label),icon=icon))
-    selected=st.navigation(pages)
+        if path.is_file():
+            page=st.Page(str(path),title=tr(label),icon=icon)
+            pages.append(page);registered[filename]=page
+    groups={'Workspace':[home]+[registered[n] for n in ['workflow_chat.py','requirements_chat.py'] if n in registered],
+        'Design':[registered[n] for n in ['floor_plans.py','model_3d.py','bim_ifc.py','engineering.py'] if n in registered],
+        'Construction':[registered[n] for n in ['schedule.py','estimation.py','labour.py'] if n in registered],
+        'Monitor & Export':[registered[n] for n in ['digital_twin.py','downloads.py'] if n in registered],
+        'Settings':[registered[n] for n in ['settings.py','demo.py'] if n in registered]}
+    selected=st.navigation({name:items for name,items in groups.items() if items},position='top')
     selected.run()
 
 
